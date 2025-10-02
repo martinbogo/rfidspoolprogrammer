@@ -87,9 +87,14 @@ struct AboutView: View {
                             .font(.headline)
                             .foregroundColor(.green)
                         
-                        Text("• NTAG215 (144 bytes user memory)")
+                        Text("• NTAG213 (144 bytes user memory)")
+                        Text("• NTAG215 (504 bytes user memory)")
                         Text("• NTAG216 (888 bytes user memory)")
+                        Text("• All types compatible - uses 144 bytes")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
                         Text("• Must be blank or unlocked")
+                            .font(.caption)
                             .foregroundColor(.secondary)
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)

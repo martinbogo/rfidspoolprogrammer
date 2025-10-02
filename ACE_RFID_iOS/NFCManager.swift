@@ -292,12 +292,17 @@ class NFCManager: NSObject, ObservableObject {
     
     private func detectTagType(_ tag: NFCMiFareTag) -> String {
         // Detect NTAG type based on available memory
-        // NTAG213: 180 bytes (45 pages)
-        // NTAG215: 540 bytes (135 pages)
-        // NTAG216: 924 bytes (231 pages)
+        // NTAG213: 180 bytes (45 pages, pages 0-44)
+        // NTAG215: 540 bytes (135 pages, pages 0-134)
+        // NTAG216: 924 bytes (231 pages, pages 0-230)
         
-        // We'll try to read a high page number to determine type
-        return "NTAG215" // Default assumption
+        // Try reading high page numbers to determine type
+        // This is best-effort detection without exhausting the NFC session
+        
+        // For now, we return a generic identifier since all three types
+        // work with our 144-byte data format (pages 4-39)
+        // NTAG213 has exactly the memory we need (144 bytes user memory)
+        return "NTAG213/215/216" // All compatible with our data format
     }
     
     private func formatTag(_ tag: NFCMiFareTag, completion: @escaping (Bool) -> Void) {

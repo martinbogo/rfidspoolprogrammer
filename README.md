@@ -138,6 +138,24 @@ The app uses standard MIFARE commands:
 
 Feel free to submit issues and pull requests to improve the app!
 
+## Support This Project
+
+<div align="center">
+
+### ☕ Enjoying this app?
+
+If you find **Spool Programmer** useful and want to support its development, consider buying me a coffee!
+
+[![Ko-fi](https://img.shields.io/badge/Ko--fi-Support%20Development-FF5E5B?style=for-the-badge&logo=ko-fi&logoColor=white)](https://ko-fi.com/martinbogo)
+
+**[☕ Buy me a coffee on Ko-fi](https://ko-fi.com/martinbogo?amount=1)**
+
+Your support helps maintain and improve this free, open-source app! ❤️
+
+</div>
+
+---
+
 ## License
 
 **MIT License** - See [LICENSE](LICENSE) file for details.

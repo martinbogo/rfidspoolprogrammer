@@ -8,6 +8,7 @@
 import Foundation
 @preconcurrency import CoreNFC
 import Combine
+import UIKit
 
 // MARK: - Debug Helper
 private func debugLog(_ message: String) {
@@ -32,6 +33,11 @@ class NFCManager: NSObject, ObservableObject {
     private var currentOperation: NFCOperation = .none
     private var writeData: RFIDTagData?
     
+    // Haptic feedback generators
+    private let successFeedback = UINotificationFeedbackGenerator()
+    private let errorFeedback = UINotificationFeedbackGenerator()
+    private let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
+    
     enum NFCOperation {
         case none
         case read
@@ -39,6 +45,26 @@ class NFCManager: NSObject, ObservableObject {
         case format
         case checkLock
         case verifyWrite
+    }
+    
+    // MARK: - Haptic Feedback
+    
+    private func playSuccessHaptic() {
+        DispatchQueue.main.async {
+            self.successFeedback.notificationOccurred(.success)
+        }
+    }
+    
+    private func playErrorHaptic() {
+        DispatchQueue.main.async {
+            self.errorFeedback.notificationOccurred(.error)
+        }
+    }
+    
+    private func playDetectionHaptic() {
+        DispatchQueue.main.async {
+            self.impactFeedback.impactOccurred()
+        }
     }
     
     // MARK: - Public Methods
@@ -539,6 +565,8 @@ extension NFCManager: NFCTagReaderSessionDelegate {
             DispatchQueue.main.async {
                 self.tagUID = uidString
                 self.tagType = self.detectTagType(tag)
+                // Play detection haptic when tag is detected
+                self.playDetectionHaptic()
             }
             
             // Perform operation based on current mode
@@ -575,6 +603,7 @@ extension NFCManager: NFCTagReaderSessionDelegate {
                 // Store the read bytes for parsing in ContentView
                 self.lastReadBytes = readBytes
                 self.statusMessage = "Tag read successfully - \(readBytes.count) bytes read"
+                self.playSuccessHaptic()
                 session.alertMessage = "Read successful!"
                 session.invalidate()
             }
@@ -599,6 +628,7 @@ extension NFCManager: NFCTagReaderSessionDelegate {
             if success {
                 DispatchQueue.main.async {
                     self.statusMessage = "✅ Write complete - Starting verification..."
+                    self.playSuccessHaptic()
                 }
                 session.alertMessage = "✅ Write done! Keep near tag for verify..."
                 
@@ -624,12 +654,14 @@ extension NFCManager: NFCTagReaderSessionDelegate {
                                                "This tag requires a password for writing.\n" +
                                                "Use the 'Status' button to see full lock details.\n\n" +
                                                "💡 Solution: Use blank NTAG215 tags instead."
+                            self.playErrorHaptic()
                             session.invalidate(errorMessage: "❌ Tag is password protected")
                         } else if lockStatus.contains("LOCKED") && !lockStatus.contains("Unlocked") {
                             self.statusMessage = "❌ Write failed: Tag has write-protection\n\n" +
                                                "Some pages are locked.\n" +
                                                "Use 'Status' button for details.\n\n" +
                                                "Try: Format Tag first, or use different tag."
+                            self.playErrorHaptic()
                             session.invalidate(errorMessage: "❌ Tag is write-protected")
                         } else {
                             // Unknown reason - provide general guidance
@@ -642,6 +674,7 @@ extension NFCManager: NFCTagReaderSessionDelegate {
                                                "1. Check tag with 'Status' button\n" +
                                                "2. Try 'Format Tag' first\n" +
                                                "3. Use blank NTAG215 tag"
+                            self.playErrorHaptic()
                             session.invalidate(errorMessage: "❌ Write failed - Check Status")
                         }
                         
@@ -658,6 +691,7 @@ extension NFCManager: NFCTagReaderSessionDelegate {
             if success {
                 DispatchQueue.main.async {
                     self.statusMessage = "✅ Tag formatted successfully"
+                    self.playSuccessHaptic()
                 }
                 session.alertMessage = "Format successful!"
                 session.invalidate()
@@ -673,18 +707,21 @@ extension NFCManager: NFCTagReaderSessionDelegate {
                                                "This tag requires a password and cannot be formatted.\n" +
                                                "Use the 'Status' button to see full lock details.\n\n" +
                                                "💡 Solution: Use blank NTAG215 tags instead."
+                            self.playErrorHaptic()
                             session.invalidate(errorMessage: "❌ Tag is password protected")
                         } else if lockStatus.contains("PERMANENTLY LOCKED") {
                             self.statusMessage = "❌ Format failed: Tag is PERMANENTLY LOCKED\n\n" +
                                                "Lock bits cannot be changed.\n" +
                                                "This tag cannot be reformatted.\n\n" +
                                                "💡 Use a different blank tag."
+                            self.playErrorHaptic()
                             session.invalidate(errorMessage: "❌ Tag permanently locked")
                         } else if lockStatus.contains("LOCKED") && !lockStatus.contains("Unlocked") {
                             self.statusMessage = "❌ Format failed: Tag has write-protection\n\n" +
                                                "Some pages are locked and cannot be cleared.\n" +
                                                "Use 'Status' button for details.\n\n" +
                                                "💡 Use a different blank tag."
+                            self.playErrorHaptic()
                             session.invalidate(errorMessage: "❌ Tag is write-protected")
                         } else {
                             // Unknown reason - provide general guidance
@@ -696,6 +733,7 @@ extension NFCManager: NFCTagReaderSessionDelegate {
                                                "Try:\n" +
                                                "1. Check tag with 'Status' button\n" +
                                                "2. Use blank NTAG215 tag"
+                            self.playErrorHaptic()
                             session.invalidate(errorMessage: "❌ Format failed - Check Status")
                         }
                         
@@ -731,6 +769,7 @@ extension NFCManager: NFCTagReaderSessionDelegate {
             guard let readBytes = readBytes else {
                 DispatchQueue.main.async {
                     self.statusMessage = "❌ Verification failed - could not read tag"
+                    self.playErrorHaptic()
                 }
                 session.invalidate(errorMessage: "Verification read failed")
                 return
@@ -757,6 +796,7 @@ extension NFCManager: NFCTagReaderSessionDelegate {
                 debugLog("✅ VERIFICATION SUCCESS: All \(bytesToCompare) bytes match!")
                 DispatchQueue.main.async {
                     self.statusMessage = "✅ Write verified successfully - Data is correct!"
+                    self.playSuccessHaptic()
                 }
                 session.alertMessage = "✅ Verified! Data written correctly."
             } else {
@@ -766,6 +806,7 @@ extension NFCManager: NFCTagReaderSessionDelegate {
                 }
                 DispatchQueue.main.async {
                     self.statusMessage = "❌ Verification failed - \(mismatchCount) bytes don't match"
+                    self.playErrorHaptic()
                 }
                 session.alertMessage = "❌ Verify failed - Data mismatch"
             }

@@ -133,12 +133,9 @@ class NFCManager: NSObject, ObservableObject {
         // Try to read configuration pages (43-44) to get password and PACK
         debugLog("🔍 Attempting to read password from tag...")
         
-        // Capture tag once at function level to avoid Sendable warnings
-        nonisolated(unsafe) let capturedTag = tag
-        
         // Read page 43 (contains PWD - password)
         let readCmd43 = Data([0x30, 43]) // READ command for page 43
-        capturedTag.sendMiFareCommand(commandPacket: readCmd43) { response43, error43 in
+        tag.sendMiFareCommand(commandPacket: readCmd43) { [tag] response43, error43 in
             if let error43 = error43 {
                 completion("❌ Cannot read password page: \(error43.localizedDescription)")
                 return
@@ -154,7 +151,7 @@ class NFCManager: NSObject, ObservableObject {
             
             // Read page 44 (contains PACK - password acknowledge)
             let readCmd44 = Data([0x30, 44])
-            capturedTag.sendMiFareCommand(commandPacket: readCmd44) { response44, error44 in
+            tag.sendMiFareCommand(commandPacket: readCmd44) { [tag] response44, error44 in
                 if let error44 = error44 {
                     completion("🔐 Password: \(pwdString)\n❌ Cannot read PACK: \(error44.localizedDescription)")
                     return
@@ -180,12 +177,9 @@ class NFCManager: NSObject, ObservableObject {
     }
     
     private func checkLockBytes(tag: NFCMiFareTag, completion: @escaping (String) -> Void) {
-        // Capture tag once at function level to avoid Sendable warnings
-        nonisolated(unsafe) let capturedTag = tag
-        
         // Read page 2 for static lock bytes
         let readCmd2 = Data([0x30, 0x02]) // READ command for page 2
-        capturedTag.sendMiFareCommand(commandPacket: readCmd2) { response2, error2 in
+        tag.sendMiFareCommand(commandPacket: readCmd2) { [tag] response2, error2 in
             if let error2 = error2 {
                 completion("❌ Failed to read lock bytes: \(error2.localizedDescription)")
                 return
@@ -224,7 +218,7 @@ class NFCManager: NSObject, ObservableObject {
             // Now check dynamic lock bytes (page 40) for NTAG215/216
             // Note: NTAG213 has 45 pages total (0-44), so page 40 exists but is less commonly used
             let readDynamicLock = Data([0x30, 0x28]) // Read page 40
-            capturedTag.sendMiFareCommand(commandPacket: readDynamicLock) { response2, error2 in
+            tag.sendMiFareCommand(commandPacket: readDynamicLock) { [tag] response2, error2 in
                 if let error2 = error2 {
                     lockInfo += "\n⚠️ Could not read dynamic lock bytes: \(error2.localizedDescription)\n"
                     lockInfo += "(Tag might be NTAG213 without dynamic locks)"
@@ -261,8 +255,7 @@ class NFCManager: NSObject, ObservableObject {
                 
                 // Now check configuration pages (41-43) for password protection
                 let readConfig = Data([0x30, 0x29]) // Read page 41 (AUTH0, ACCESS)
-                nonisolated(unsafe) let capturedTag2 = capturedTag
-                capturedTag2.sendMiFareCommand(commandPacket: readConfig) { response3, error3 in
+                tag.sendMiFareCommand(commandPacket: readConfig) { [tag] response3, error3 in
                     if let error3 = error3 {
                         lockInfo += "\n⚠️ Could not read config: \(error3.localizedDescription)"
                         completion(lockInfo)

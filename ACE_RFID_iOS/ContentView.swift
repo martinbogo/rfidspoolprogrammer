@@ -590,6 +590,22 @@ struct FooterView: View {
                     .foregroundColor(.secondary)
             }
             .padding(.top, 8)
+            
+            // GitHub Link
+            Link(destination: URL(string: "https://github.com/martinbogo/rfidspoolprogrammer")!) {
+                HStack(spacing: 6) {
+                    Image(systemName: "chevron.left.forwardslash.chevron.right")
+                        .font(.caption2)
+                    
+                    Text("Powered by GitHub")
+                        .font(.caption2)
+                    
+                    Image(systemName: "arrow.up.right.square")
+                        .font(.caption2)
+                }
+                .foregroundColor(.secondary)
+                .padding(.vertical, 8)
+            }
         }
         .padding(.horizontal)
         .padding(.bottom, 20)

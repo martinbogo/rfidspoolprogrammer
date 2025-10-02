@@ -574,63 +574,6 @@ struct TemperatureBadge: View {
 struct FooterView: View {
     var body: some View {
         VStack(spacing: 16) {
-            // Ko-fi Support Card
-            Link(destination: URL(string: "https://ko-fi.com/martinbogo?amount=1")!) {
-                HStack(spacing: 12) {
-                    // Coffee icon
-                    ZStack {
-                        Circle()
-                            .fill(
-                                LinearGradient(
-                                    colors: [
-                                        Color(red: 1.0, green: 0.38, blue: 0.27),
-                                        Color(red: 0.94, green: 0.22, blue: 0.36)
-                                    ],
-                                    startPoint: .topLeading,
-                                    endPoint: .bottomTrailing
-                                )
-                            )
-                            .frame(width: 44, height: 44)
-                        
-                        Image(systemName: "cup.and.saucer.fill")
-                            .font(.system(size: 20, weight: .medium))
-                            .foregroundColor(.white)
-                    }
-                    
-                    // Text content
-                    VStack(alignment: .leading, spacing: 4) {
-                        HStack(spacing: 4) {
-                            Text("Enjoying this app?")
-                                .font(.subheadline)
-                                .fontWeight(.semibold)
-                            
-                            Image(systemName: "heart.fill")
-                                .font(.caption)
-                                .foregroundColor(Color(red: 1.0, green: 0.38, blue: 0.27))
-                        }
-                        
-                        Text("Buy me a coffee on Ko-fi")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
-                    
-                    Spacer()
-                    
-                    // Chevron
-                    Image(systemName: "chevron.right")
-                        .font(.caption)
-                        .fontWeight(.semibold)
-                        .foregroundColor(.secondary)
-                }
-                .padding(16)
-                .background(
-                    RoundedRectangle(cornerRadius: 16)
-                        .fill(Color(.systemBackground))
-                        .shadow(color: Color.black.opacity(0.08), radius: 8, x: 0, y: 4)
-                )
-            }
-            .buttonStyle(.plain)
-            
             // App info
             VStack(spacing: 8) {
                 Text("Spool Programmer")

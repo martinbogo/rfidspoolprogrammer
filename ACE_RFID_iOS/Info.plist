@@ -39,7 +39,6 @@
 	<string>This app needs NFC access to read and write RFID tags for filament spool programming.</string>
 	<key>com.apple.developer.nfc.readersession.formats</key>
 	<array>
-		<string>NDEF</string>
 		<string>TAG</string>
 	</array>
 </dict>

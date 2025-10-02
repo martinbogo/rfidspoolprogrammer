@@ -13,7 +13,7 @@
 		1A000007000000000000001 /* NFCManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A000008000000000000001 /* NFCManager.swift */; };
 		1A000009000000000000001 /* FilamentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A000010000000000000001 /* FilamentModel.swift */; };
 		1A000011000000000000001 /* ColorPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A000012000000000000001 /* ColorPickerView.swift */; };
-		1A000030000000000000001 /* (null) in Resources */ = {isa = PBXBuildFile; };
+		1A000031000000000000001 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1A000032000000000000001 /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +26,7 @@
 		1A000013000000000000001 /* ACE_RFID_iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ACE_RFID_iOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A000014000000000000001 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1A000015000000000000001 /* ACE_RFID_iOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ACE_RFID_iOS.entitlements; sourceTree = "<group>"; };
+		1A000032000000000000001 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +59,7 @@
 				1A000010000000000000001 /* FilamentModel.swift */,
 				1A000012000000000000001 /* ColorPickerView.swift */,
 				1A000006000000000000001 /* Assets.xcassets */,
+				1A000032000000000000001 /* LaunchScreen.storyboard */,
 			);
 			path = ACE_RFID_iOS;
 			sourceTree = "<group>";
@@ -129,7 +131,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1A000005000000000000001 /* Assets.xcassets in Resources */,
-				1A000030000000000000001 /* (null) in Resources */,
+				1A000031000000000000001 /* LaunchScreen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

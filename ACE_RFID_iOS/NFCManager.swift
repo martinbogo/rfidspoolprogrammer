@@ -151,7 +151,8 @@ class NFCManager: NSObject, ObservableObject {
             
             // Read page 44 (contains PACK - password acknowledge)
             let readCmd44 = Data([0x30, 44])
-            tag.sendMiFareCommand(commandPacket: readCmd44) { response44, error44 in
+            nonisolated(unsafe) let capturedTag = tag
+            capturedTag.sendMiFareCommand(commandPacket: readCmd44) { response44, error44 in
                 if let error44 = error44 {
                     completion("🔐 Password: \(pwdString)\n❌ Cannot read PACK: \(error44.localizedDescription)")
                     return
@@ -218,7 +219,8 @@ class NFCManager: NSObject, ObservableObject {
             // Now check dynamic lock bytes (page 40) for NTAG215/216
             // Note: NTAG213 has 45 pages total (0-44), so page 40 exists but is less commonly used
             let readDynamicLock = Data([0x30, 0x28]) // Read page 40
-            tag.sendMiFareCommand(commandPacket: readDynamicLock) { response2, error2 in
+            nonisolated(unsafe) let capturedTag = tag
+            capturedTag.sendMiFareCommand(commandPacket: readDynamicLock) { response2, error2 in
                 if let error2 = error2 {
                     lockInfo += "\n⚠️ Could not read dynamic lock bytes: \(error2.localizedDescription)\n"
                     lockInfo += "(Tag might be NTAG213 without dynamic locks)"
@@ -255,7 +257,8 @@ class NFCManager: NSObject, ObservableObject {
                 
                 // Now check configuration pages (41-43) for password protection
                 let readConfig = Data([0x30, 0x29]) // Read page 41 (AUTH0, ACCESS)
-                tag.sendMiFareCommand(commandPacket: readConfig) { response3, error3 in
+                nonisolated(unsafe) let capturedTag2 = capturedTag
+                capturedTag2.sendMiFareCommand(commandPacket: readConfig) { response3, error3 in
                     if let error3 = error3 {
                         lockInfo += "\n⚠️ Could not read config: \(error3.localizedDescription)"
                         completion(lockInfo)
@@ -432,11 +435,12 @@ class NFCManager: NSObject, ObservableObject {
         var authCommand = Data([0x1B]) // PWD_AUTH
         authCommand.append(contentsOf: password)
         
-        tag.sendMiFareCommand(commandPacket: authCommand) { response, error in
+        nonisolated(unsafe) let capturedTag = tag
+        capturedTag.sendMiFareCommand(commandPacket: authCommand) { response, error in
             if let error = error {
                 debugLog("   ❌ Password \(passwordIndex + 1) failed: \(error.localizedDescription)")
                 // Try next password
-                self.tryPasswordsAndWrite(tag: tag, passwords: passwords, passwordIndex: passwordIndex + 1, data: data, startPage: startPage, endPage: endPage, completion: completion)
+                self.tryPasswordsAndWrite(tag: capturedTag, passwords: passwords, passwordIndex: passwordIndex + 1, data: data, startPage: startPage, endPage: endPage, completion: completion)
                 return
             }
             
@@ -446,15 +450,15 @@ class NFCManager: NSObject, ObservableObject {
                 debugLog("   ✅ SUCCESS! Password \(passwordIndex + 1) worked! PACK: \(pack)")
                 
                 // Now write with this authenticated session
-                self.performDirectWrites(tag: tag, data: data, startPage: startPage, endPage: endPage, completion: completion)
+                self.performDirectWrites(tag: capturedTag, data: data, startPage: startPage, endPage: endPage, completion: completion)
             } else if response.count == 1 && response[0] == 0x00 {
                 debugLog("   ❌ Password \(passwordIndex + 1) rejected (NAK)")
                 // Try next password
-                self.tryPasswordsAndWrite(tag: tag, passwords: passwords, passwordIndex: passwordIndex + 1, data: data, startPage: startPage, endPage: endPage, completion: completion)
+                self.tryPasswordsAndWrite(tag: capturedTag, passwords: passwords, passwordIndex: passwordIndex + 1, data: data, startPage: startPage, endPage: endPage, completion: completion)
             } else {
                 debugLog("   ⚠️ Unexpected response: \(response.map { String(format: "%02X", $0) }.joined(separator: " "))")
                 // Try next password
-                self.tryPasswordsAndWrite(tag: tag, passwords: passwords, passwordIndex: passwordIndex + 1, data: data, startPage: startPage, endPage: endPage, completion: completion)
+                self.tryPasswordsAndWrite(tag: capturedTag, passwords: passwords, passwordIndex: passwordIndex + 1, data: data, startPage: startPage, endPage: endPage, completion: completion)
             }
         }
     }
@@ -639,8 +643,9 @@ extension NFCManager: NFCTagReaderSessionDelegate {
                 session.alertMessage = "✅ Write done! Keep near tag for verify..."
                 
                 // Wait a moment then start verification in new session
+                nonisolated(unsafe) let capturedSession = session
                 DispatchQueue.global().asyncAfter(deadline: .now() + 0.5) {
-                    session.invalidate()
+                    capturedSession.invalidate()
                     
                     // Auto-start verify session after brief delay
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {

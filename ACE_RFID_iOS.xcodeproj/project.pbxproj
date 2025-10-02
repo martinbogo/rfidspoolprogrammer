@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1A000001000000000000001 /* ACE_RFID_iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A000002000000000000001 /* ACE_RFID_iOSApp.swift */; };
+		1A000001000000000000001 /* SpoolProgrammerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A000002000000000000001 /* SpoolProgrammerApp.swift */; };
 		1A000003000000000000001 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A000004000000000000001 /* ContentView.swift */; };
 		1A000005000000000000001 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1A000006000000000000001 /* Assets.xcassets */; };
 		1A000007000000000000001 /* NFCManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A000008000000000000001 /* NFCManager.swift */; };
@@ -17,7 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		1A000002000000000000001 /* ACE_RFID_iOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ACE_RFID_iOSApp.swift; sourceTree = "<group>"; };
+		1A000002000000000000001 /* SpoolProgrammerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpoolProgrammerApp.swift; sourceTree = "<group>"; };
 		1A000004000000000000001 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		1A000006000000000000001 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1A000008000000000000001 /* NFCManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFCManager.swift; sourceTree = "<group>"; };
@@ -52,7 +52,7 @@
 			children = (
 				1A000014000000000000001 /* Info.plist */,
 				1A000015000000000000001 /* ACE_RFID_iOS.entitlements */,
-				1A000002000000000000001 /* ACE_RFID_iOSApp.swift */,
+				1A000002000000000000001 /* SpoolProgrammerApp.swift */,
 				1A000004000000000000001 /* ContentView.swift */,
 				1A000008000000000000001 /* NFCManager.swift */,
 				1A000010000000000000001 /* FilamentModel.swift */,
@@ -141,7 +141,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1A000003000000000000001 /* ContentView.swift in Sources */,
-				1A000001000000000000001 /* ACE_RFID_iOSApp.swift in Sources */,
+				1A000001000000000000001 /* SpoolProgrammerApp.swift in Sources */,
 				1A000007000000000000001 /* NFCManager.swift in Sources */,
 				1A000009000000000000001 /* FilamentModel.swift in Sources */,
 				1A000011000000000000001 /* ColorPickerView.swift in Sources */,

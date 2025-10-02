@@ -18,6 +18,7 @@ struct ContentView: View {
     @State private var showingAddFilament = false
     @State private var showingEditFilament = false
     @State private var showingLockStatus = false
+    @State private var showingAbout = false
     
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
@@ -67,6 +68,15 @@ struct ContentView: View {
             .background(Color(.systemGroupedBackground))
             .navigationTitle("RFID Spool Programmer")
             .navigationBarTitleDisplayMode(.large)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        showingAbout = true
+                    } label: {
+                        Image(systemName: "info.circle")
+                    }
+                }
+            }
             .sheet(isPresented: $showingColorPicker) {
                 ColorPickerView(selectedColor: $selectedColor)
             }
@@ -80,6 +90,9 @@ struct ContentView: View {
             }
             .sheet(isPresented: $showingLockStatus) {
                 LockStatusView(lockStatus: nfcManager.tagLockStatus)
+            }
+            .sheet(isPresented: $showingAbout) {
+                AboutView()
             }
             .onChange(of: nfcManager.lastReadBytes) { newBytes in
                 if let bytes = newBytes, let tagData = RFIDTagData.fromBytes(bytes, database: filamentDB) {

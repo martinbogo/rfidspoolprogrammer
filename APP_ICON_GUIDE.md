@@ -6,6 +6,7 @@
 
 1. Save the generated image as: `AppIcon-1024.png`
 2. In Xcode, open: `ACE_RFID_iOS/Assets.xcassets/AppIcon.appiconset/`
+   - (ACE_RFID_iOS is the project folder - the app displays as "Spool Programmer")
 3. Open `Contents.json` in that folder
 4. Replace the contents with this simplified version:
 

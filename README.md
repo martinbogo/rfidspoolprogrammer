@@ -25,7 +25,8 @@ This iOS app is based on the [ACE-RFID](https://github.com/DnG-Crafts/ACE-RFID) 
 
 ### Using Xcode
 
-1. Open `ACE_RFID_iOS.xcodeproj` in Xcode
+1. Open `ACE_RFID_iOS.xcodeproj` in Xcode (technical project name)
+   - The app displays as **"Spool Programmer"** to users
 2. Connect your iPhone
 3. Select your development team in the project settings
 4. Build and run on your device (NFC does not work in the simulator)

@@ -637,7 +637,7 @@ struct FooterView: View {
                     .font(.caption)
                     .fontWeight(.semibold)
                 
-                Text("Programs NTAG215/216 tags for 3D printer filament spools")
+                Text("Programs NTAG213/215/216 tags for 3D printer filament spools")
                     .font(.caption2)
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)

@@ -66,7 +66,7 @@ struct AboutView: View {
                             InstructionRow(
                                 number: "3",
                                 title: "Write to Tag",
-                                description: "Tap 'Write Tag' and hold your phone near the NTAG215/216 tag"
+                                description: "Tap 'Write Tag' and hold your phone near the NTAG213/215/216 tag"
                             )
                             
                             InstructionRow(

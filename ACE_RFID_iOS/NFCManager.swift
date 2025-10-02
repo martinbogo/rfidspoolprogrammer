@@ -216,6 +216,7 @@ class NFCManager: NSObject, ObservableObject {
             }
             
             // Now check dynamic lock bytes (page 40) for NTAG215/216
+            // Note: NTAG213 has 45 pages total (0-44), so page 40 exists but is less commonly used
             let readDynamicLock = Data([0x30, 0x28]) // Read page 40
             tag.sendMiFareCommand(commandPacket: readDynamicLock) { response2, error2 in
                 if let error2 = error2 {
@@ -236,7 +237,7 @@ class NFCManager: NSObject, ObservableObject {
                 
                 debugLog("🔒 Dynamic lock bytes: \(String(format: "%02X %02X %02X", dynLock0, dynLock1, dynLock2))")
                 
-                lockInfo += "\nDynamic Lock Bytes (NTAG215/216):\n"
+                lockInfo += "\nDynamic Lock Bytes (NTAG213/215/216):\n"
                 
                 // Check if any dynamic lock bits are set
                 if dynLock0 != 0 || dynLock1 != 0 || dynLock2 != 0 {
@@ -275,7 +276,7 @@ class NFCManager: NSObject, ObservableObject {
                             lockInfo += "   ACCESS: \(String(format: "0x%02X", access))\n"
                             lockInfo += "\n   🔐 TAG IS PASSWORD PROTECTED!\n"
                             lockInfo += "   Writes require authentication.\n"
-                            lockInfo += "   Use blank NTAG215 tags for custom programming.\n"
+                            lockInfo += "   Use blank NTAG213/215/216 tags for custom programming.\n"
                             completion(lockInfo)
                         } else {
                             lockInfo += " (No password protection)\n"
@@ -658,7 +659,7 @@ extension NFCManager: NFCTagReaderSessionDelegate {
                             self.statusMessage = "❌ Write failed: Tag is PASSWORD PROTECTED\n\n" +
                                                "This tag requires a password for writing.\n" +
                                                "Use the 'Status' button to see full lock details.\n\n" +
-                                               "💡 Solution: Use blank NTAG215 tags instead."
+                                               "💡 Solution: Use blank NTAG213/215/216 tags instead."
                             self.playErrorHaptic()
                             session.invalidate(errorMessage: "❌ Tag is password protected")
                         } else if lockStatus.contains("LOCKED") && !lockStatus.contains("Unlocked") {
@@ -678,7 +679,7 @@ extension NFCManager: NFCTagReaderSessionDelegate {
                                                "Try:\n" +
                                                "1. Check tag with 'Status' button\n" +
                                                "2. Try 'Format Tag' first\n" +
-                                               "3. Use blank NTAG215 tag"
+                                               "3. Use blank NTAG213/215/216 tag"
                             self.playErrorHaptic()
                             session.invalidate(errorMessage: "❌ Write failed - Check Status")
                         }
@@ -711,7 +712,7 @@ extension NFCManager: NFCTagReaderSessionDelegate {
                             self.statusMessage = "❌ Format failed: Tag is PASSWORD PROTECTED\n\n" +
                                                "This tag requires a password and cannot be formatted.\n" +
                                                "Use the 'Status' button to see full lock details.\n\n" +
-                                               "💡 Solution: Use blank NTAG215 tags instead."
+                                               "💡 Solution: Use blank NTAG213/215/216 tags instead."
                             self.playErrorHaptic()
                             session.invalidate(errorMessage: "❌ Tag is password protected")
                         } else if lockStatus.contains("PERMANENTLY LOCKED") {
@@ -737,7 +738,7 @@ extension NFCManager: NFCTagReaderSessionDelegate {
                                                "• Unknown write protection\n\n" +
                                                "Try:\n" +
                                                "1. Check tag with 'Status' button\n" +
-                                               "2. Use blank NTAG215 tag"
+                                               "2. Use blank NTAG213/215/216 tag"
                             self.playErrorHaptic()
                             session.invalidate(errorMessage: "❌ Format failed - Check Status")
                         }

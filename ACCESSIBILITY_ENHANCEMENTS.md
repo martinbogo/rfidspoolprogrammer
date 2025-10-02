@@ -17,7 +17,7 @@
 .accessibilityLabel(nfcManager.tagUID.isEmpty ? 
     "NFC Status: No tag detected" : 
     "NFC Status: Tag connected, \(nfcManager.tagType), UID \(nfcManager.tagUID)")
-.accessibilityHint("Hold an NTAG215 or NTAG216 tag near your iPhone to read it")
+.accessibilityHint("Hold an NTAG213, NTAG215, or NTAG216 tag near your iPhone to read it")
 ```
 
 #### FilamentSelectionCard - Menu

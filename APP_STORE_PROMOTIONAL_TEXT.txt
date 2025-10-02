@@ -1,0 +1,36 @@
+APP STORE PROMOTIONAL TEXT
+
+=== PROMOTIONAL TEXT OPTIONS (All under 170 characters) ===
+
+Option 1: Simple & Direct (148 chars) - RECOMMENDED
+Program RFID tags for your 3D printer filament spools. 18 profiles, custom colors, intuitive design. Built by makers, for makers. Free!
+
+Option 2: Feature-focused (155 chars)
+Create custom RFID tags for filament spools with ease. 18 profiles, RGB color picker, beautiful interface. Perfect for 3D printing makers. Free!
+
+Option 3: Problem-solution (159 chars)
+Stop manually tracking filament! Program NTAG215 tags with filament type, color, and spool info. Works with Anycubic printers. Free, no ads, no tracking.
+
+Option 4: Technical (150 chars)
+Professional RFID tag programming for 3D printer filament. Supports NTAG215/216, 18 filament types, custom colors. Native iOS app for makers.
+
+Option 5: Community-focused (157 chars)
+Program your own filament spool tags! 18 profiles, custom colors, zero learning curve. Based on the open-source ACE-RFID project. Download free today!
+
+Option 6: Ultra-concise (119 chars)
+Program RFID tags for 3D printer filament spools. 18 profiles, custom colors, simple interface. Free with no ads!
+
+---
+
+## Usage Notes:
+
+- **Promotional text** appears at the top of your App Store listing
+- Can be updated **without app review** (instant changes)
+- Great for announcing updates, sales, or seasonal messaging
+- Keep it compelling and action-oriented
+- Include your key differentiator
+
+---
+
+## Recommended: Option 1
+The first option balances features, benefits, and call-to-action while staying maker-focused and authentic to your target audience.

@@ -1,0 +1,50 @@
+APP REVIEW INFORMATION - NOTES FOR REVIEWERS
+
+=== NOTES (Recommended) ===
+
+Thank you for reviewing Spool Programmer!
+
+TESTING REQUIREMENTS:
+This app requires physical NTAG215 or NTAG216 NFC tags for full functionality testing. These are inexpensive tags available from most electronics suppliers.
+
+HOW TO TEST:
+1. Launch the app on an iPhone with NFC capability (iPhone 7 or later)
+2. Select any filament profile from the dropdown (e.g., "Generic PLA")
+3. Choose a color using the RGB picker or presets
+4. Hold a blank NTAG215/216 tag near the top of the iPhone
+5. Tap "Write to Tag" - the app will write filament data to the tag
+6. Use "Read from Tag" to verify the written data
+7. "Status" button shows tag memory layout and lock status
+8. "Format" clears the tag for reprogramming
+
+IMPORTANT NOTES:
+- The app does NOT collect, store, or transmit any user data
+- All NFC operations are local to the device
+- Some pre-programmed manufacturer tags may be write-protected (this is expected behavior and the app will display an appropriate error message)
+- Blank tags are recommended for testing
+- No account or login required
+
+PRIVACY:
+No analytics, no tracking, no data collection. The app only interacts with NFC tags.
+
+If you need blank NTAG215 tags for testing, I'm happy to mail some to Apple's review facility. Please let me know.
+
+Thank you for your time!
+
+==========
+
+=== ALTERNATIVE SHORTER VERSION ===
+
+This app programs NTAG215/216 NFC tags for 3D printer filament spools. 
+
+TESTING: Requires physical NFC tags (NTAG215/216). Hold a blank tag near iPhone, select a profile, tap "Write to Tag". Use "Read from Tag" to verify.
+
+NOTE: Pre-programmed manufacturer tags may be write-protected (expected). Blank tags recommended.
+
+PRIVACY: No data collection, no tracking, all operations local to device.
+
+Happy to provide test tags if needed. Thank you!
+
+==========
+
+Choose whichever length feels appropriate. The longer version provides more context and shows you've thought through the reviewer's experience. The shorter version hits the key points efficiently.

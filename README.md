@@ -1,4 +1,4 @@
-# ACE RFID iOS
+# Spool Programmer
 
 An iOS application for programming RFID tags (NTAG213/215/216) for Anycubic 3D printer filament spools.
 

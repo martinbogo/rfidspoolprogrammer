@@ -1,6 +1,6 @@
 //
 //  ColorPickerView.swift
-//  ACE RFID iOS
+//  Spool Programmer
 //
 //  Simplified color picker with presets and gradient
 //

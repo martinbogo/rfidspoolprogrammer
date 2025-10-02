@@ -144,13 +144,13 @@ Feel free to submit issues and pull requests to improve the app!
 
 ### ☕ Enjoying this app?
 
-If you find **Spool Programmer** useful and want to support its development, consider buying me a coffee!
+If you find **Spool Programmer** useful and want to support its development:
 
 [![Ko-fi](https://img.shields.io/badge/Ko--fi-Support%20Development-FF5E5B?style=for-the-badge&logo=ko-fi&logoColor=white)](https://ko-fi.com/martinbogo)
 
-**[☕ Buy me a coffee on Ko-fi](https://ko-fi.com/martinbogo?amount=1)**
+**[☕ Give me a tip on Ko-Fi!](https://ko-fi.com/martinbogo?amount=1)**
 
-Your support helps maintain and improve this free, open-source app! ❤️
+Your tip helps maintain and improve this free, open-source app! ❤️
 
 </div>
 

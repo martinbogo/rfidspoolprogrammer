@@ -2,6 +2,8 @@
 
 An iOS application for programming RFID tags (NTAG213/215/216) for Anycubic 3D printer filament spools.
 
+[Download Spool Programmer for Free on the Apple App Store](https://apps.apple.com/us/app/spool-programmer/id6753324939)
+
 ## Features
 
 - ✅ **Read/Write RFID Tags**: Read and write filament data to NFC RFID tags

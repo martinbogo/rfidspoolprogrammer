@@ -10,6 +10,7 @@ import SwiftUI
 struct ContentView: View {
     @StateObject private var filamentDB = FilamentDatabase()
     @StateObject private var nfcManager = NFCManager()
+    @StateObject private var settings = AppSettings.shared
     
     @State private var selectedProfile: FilamentProfile?
     @State private var selectedColor: Color = .blue
@@ -19,6 +20,9 @@ struct ContentView: View {
     @State private var showingEditFilament = false
     @State private var showingLockStatus = false
     @State private var showingAbout = false
+    @State private var showingSettings = false
+    @State private var showingTagDetails = false
+    @State private var currentTagDetails: TagDetails?
     
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
@@ -78,10 +82,18 @@ struct ContentView: View {
                 }
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
-                        showingAbout = true
-                    } label: {
-                        Image(systemName: "info.circle")
+                    HStack(spacing: 16) {
+                        Button {
+                            showingSettings = true
+                        } label: {
+                            Image(systemName: "gearshape")
+                        }
+                        
+                        Button {
+                            showingAbout = true
+                        } label: {
+                            Image(systemName: "info.circle")
+                        }
                     }
                 }
             }
@@ -102,6 +114,14 @@ struct ContentView: View {
             .sheet(isPresented: $showingAbout) {
                 AboutView()
             }
+            .sheet(isPresented: $showingSettings) {
+                SettingsView(settings: settings)
+            }
+            .sheet(isPresented: $showingTagDetails) {
+                if let details = currentTagDetails {
+                    TagDetailsView(details: details)
+                }
+            }
             .onChange(of: nfcManager.lastReadBytes) { newBytes in
                 if let bytes = newBytes, let tagData = RFIDTagData.fromBytes(bytes, database: filamentDB) {
                     withAnimation(.spring(response: 0.3)) {
@@ -110,6 +130,20 @@ struct ContentView: View {
                         selectedSpoolSize = tagData.spoolSize
                         nfcManager.lastReadData = tagData
                     }
+                    
+                    // Show tag details
+                    let memoryUsed = bytes.count
+                    let tagDetails = TagDetails(
+                        uid: nfcManager.tagUID,
+                        tagType: nfcManager.tagType.isEmpty ? "NTAG215" : nfcManager.tagType,
+                        memoryUsed: memoryUsed,
+                        memoryTotal: 504,
+                        readDate: Date(),
+                        hasData: true,
+                        dataType: "Filament: \(tagData.profile.name)"
+                    )
+                    currentTagDetails = tagDetails
+                    showingTagDetails = true
                 }
             }
         }
@@ -122,7 +156,7 @@ struct ContentView: View {
         withAnimation(.spring(response: 0.3)) {
             selectedProfile = nil
             selectedColor = .blue
-            selectedSpoolSize = .kg1
+            selectedSpoolSize = settings.defaultSpoolSize
             nfcManager.tagUID = ""
             nfcManager.tagType = ""
             nfcManager.lastReadData = nil

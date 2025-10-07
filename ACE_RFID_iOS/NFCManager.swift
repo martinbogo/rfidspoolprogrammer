@@ -54,18 +54,21 @@ class NFCManager: NSObject, ObservableObject {
     // MARK: - Haptic Feedback
     
     private func playSuccessHaptic() {
+        guard AppSettings.shared.hapticFeedbackEnabled else { return }
         DispatchQueue.main.async {
             self.successFeedback.notificationOccurred(.success)
         }
     }
     
     private func playErrorHaptic() {
+        guard AppSettings.shared.hapticFeedbackEnabled else { return }
         DispatchQueue.main.async {
             self.errorFeedback.notificationOccurred(.error)
         }
     }
     
     private func playDetectionHaptic() {
+        guard AppSettings.shared.hapticFeedbackEnabled else { return }
         DispatchQueue.main.async {
             self.impactFeedback.impactOccurred()
         }
@@ -644,16 +647,26 @@ extension NFCManager: NFCTagReaderSessionDelegate {
                 }
                 session.alertMessage = "✅ Write done! Keep near tag for verify..."
                 
-                // Wait a moment then start verification in new session
-                nonisolated(unsafe) let capturedSession = session
-                DispatchQueue.global().asyncAfter(deadline: .now() + 0.5) {
-                    capturedSession.invalidate()
-                    
-                    // Auto-start verify session after brief delay
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                        self.currentOperation = .verifyWrite
-                        self.startSession(with: "Hold near tag to verify write...")
+                // Check if auto-verify is enabled
+                if AppSettings.shared.autoVerifyEnabled {
+                    // Wait a moment then start verification in new session
+                    nonisolated(unsafe) let capturedSession = session
+                    DispatchQueue.global().asyncAfter(deadline: .now() + 0.5) {
+                        capturedSession.invalidate()
+                        
+                        // Auto-start verify session after brief delay
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                            self.currentOperation = .verifyWrite
+                            self.startSession(with: "Hold near tag to verify write...")
+                        }
                     }
+                } else {
+                    // Just close the session without verify
+                    DispatchQueue.main.async {
+                        self.statusMessage = "✅ Write complete!"
+                    }
+                    session.alertMessage = "✅ Write complete!"
+                    session.invalidate()
                 }
             } else {
                 debugLog("⚠️ Write failed. Checking if tag is password-protected...")

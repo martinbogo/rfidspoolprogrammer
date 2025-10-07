@@ -15,6 +15,10 @@
 		1A000011000000000000001 /* ColorPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A000012000000000000001 /* ColorPickerView.swift */; };
 		1A000033000000000000001 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A000034000000000000001 /* AboutView.swift */; };
 		1A000031000000000000001 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1A000032000000000000001 /* LaunchScreen.storyboard */; };
+		1A000035000000000000001 /* SettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A000036000000000000001 /* SettingsModel.swift */; };
+		1A000037000000000000001 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A000038000000000000001 /* SettingsView.swift */; };
+		1A000039000000000000001 /* TagDetailsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A000040000000000000001 /* TagDetailsModel.swift */; };
+		1A000041000000000000001 /* TagDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A000042000000000000001 /* TagDetailsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,6 +33,10 @@
 		1A000015000000000000001 /* ACE_RFID_iOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ACE_RFID_iOS.entitlements; sourceTree = "<group>"; };
 		1A000034000000000000001 /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
 		1A000032000000000000001 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		1A000036000000000000001 /* SettingsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsModel.swift; sourceTree = "<group>"; };
+		1A000038000000000000001 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		1A000040000000000000001 /* TagDetailsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagDetailsModel.swift; sourceTree = "<group>"; };
+		1A000042000000000000001 /* TagDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagDetailsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,6 +69,10 @@
 				1A000010000000000000001 /* FilamentModel.swift */,
 				1A000012000000000000001 /* ColorPickerView.swift */,
 				1A000034000000000000001 /* AboutView.swift */,
+				1A000036000000000000001 /* SettingsModel.swift */,
+				1A000038000000000000001 /* SettingsView.swift */,
+				1A000040000000000000001 /* TagDetailsModel.swift */,
+				1A000042000000000000001 /* TagDetailsView.swift */,
 				1A000006000000000000001 /* Assets.xcassets */,
 				1A000032000000000000001 /* LaunchScreen.storyboard */,
 			);
@@ -151,6 +163,10 @@
 				1A000009000000000000001 /* FilamentModel.swift in Sources */,
 				1A000011000000000000001 /* ColorPickerView.swift in Sources */,
 				1A000033000000000000001 /* AboutView.swift in Sources */,
+				1A000035000000000000001 /* SettingsModel.swift in Sources */,
+				1A000037000000000000001 /* SettingsView.swift in Sources */,
+				1A000039000000000000001 /* TagDetailsModel.swift in Sources */,
+				1A000041000000000000001 /* TagDetailsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

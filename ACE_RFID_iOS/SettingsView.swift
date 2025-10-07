@@ -13,12 +13,13 @@ struct SettingsView: View {
     
     var body: some View {
         NavigationView {
-            Form {
-                // General Settings
-                Section {
+            List {
+                                // General Settings
+                Section(header: Text("General"), 
+                        footer: Text("Default spool size will be pre-selected when resetting or starting fresh.")) {
                     Picker("Default Spool Size", selection: $settings.defaultSpoolSize) {
-                        ForEach([SpoolSize.kg025, .kg05, .kg075, .kg1, .kg2, .kg3, .kg5], id: \.self) { size in
-                            Text(size.displayName).tag(size)
+                        ForEach(SpoolSize.allCases, id: \.self) { size in
+                            Text(size.rawValue).tag(size)
                         }
                     }
                     
@@ -27,33 +28,23 @@ struct SettingsView: View {
                             Text(unit.rawValue).tag(unit)
                         }
                     }
-                } header: {
-                    Text("General")
-                } footer: {
-                    Text("Default spool size will be pre-selected when resetting or starting fresh.")
                 }
                 
                 // NFC Settings
-                Section {
+                Section(header: Text("NFC Operations"),
+                        footer: Text("Auto-verify reads the tag after writing to ensure data was written correctly. Haptic feedback provides tactile confirmation of operations.")) {
                     Toggle("Auto-Verify After Write", isOn: $settings.autoVerifyEnabled)
                     Toggle("Haptic Feedback", isOn: $settings.hapticFeedbackEnabled)
-                } header: {
-                    Text("NFC Operations")
-                } footer: {
-                    Text("Auto-verify reads the tag after writing to ensure data was written correctly. Haptic feedback provides tactile confirmation of operations.")
                 }
                 
                 // Advanced Settings
-                Section {
+                Section(header: Text("Advanced"),
+                        footer: Text("Debug information shows detailed technical data during NFC operations.")) {
                     Toggle("Show Debug Information", isOn: $settings.showDebugInfo)
-                } header: {
-                    Text("Advanced")
-                } footer: {
-                    Text("Debug information shows detailed technical data during NFC operations.")
                 }
                 
                 // Reset Section
-                Section {
+                Section(footer: Text("This will reset all settings to their default values.")) {
                     Button(role: .destructive) {
                         settings.resetToDefaults()
                     } label: {
@@ -62,12 +53,10 @@ struct SettingsView: View {
                             Text("Reset All Settings to Defaults")
                         }
                     }
-                } footer: {
-                    Text("This will reset all settings to their default values.")
                 }
                 
                 // App Info
-                Section {
+                Section(header: Text("About")) {
                     HStack {
                         Text("Version")
                         Spacer()
@@ -81,8 +70,6 @@ struct SettingsView: View {
                         Text(Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "1")
                             .foregroundColor(.secondary)
                     }
-                } header: {
-                    Text("About")
                 }
             }
             .navigationTitle("Settings")

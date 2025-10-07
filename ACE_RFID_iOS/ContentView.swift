@@ -69,6 +69,14 @@ struct ContentView: View {
             .navigationTitle("RFID Spool Programmer")
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        resetToDefaults()
+                    } label: {
+                        Label("Reset", systemImage: "arrow.counterclockwise")
+                    }
+                }
+                
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
                         showingAbout = true
@@ -106,6 +114,22 @@ struct ContentView: View {
             }
         }
         .navigationViewStyle(StackNavigationViewStyle())
+    }
+    
+    // MARK: - Reset to Defaults
+    
+    private func resetToDefaults() {
+        withAnimation(.spring(response: 0.3)) {
+            selectedProfile = nil
+            selectedColor = .blue
+            selectedSpoolSize = .kg1
+            nfcManager.tagUID = ""
+            nfcManager.tagType = ""
+            nfcManager.lastReadData = nil
+            nfcManager.lastReadBytes = nil
+            nfcManager.tagLockStatus = ""
+            nfcManager.statusMessage = ""
+        }
     }
 }
 

@@ -276,15 +276,16 @@ class NFCManager: NSObject, ObservableObject {
                         lockInfo += String(format: "   AUTH0: 0x%02X", auth0)
                         
                         if auth0 < 0xFF {
-                            lockInfo += " ⚠️ PASSWORD REQUIRED from page \(auth0)!\n"
+                            lockInfo += " (Protection enabled from page \(auth0))\n"
                             lockInfo += "   ACCESS: \(String(format: "0x%02X", access))\n"
-                            lockInfo += "\n   🔐 TAG IS PASSWORD PROTECTED!\n"
-                            lockInfo += "   Writes require authentication.\n"
-                            lockInfo += "   Use blank NTAG213/215/216 tags for custom programming.\n"
+                            lockInfo += "\n   ℹ️ Password protection is CONFIGURED\n"
+                            lockInfo += "   AUTH0 indicates writes may require authentication.\n"
+                            lockInfo += "\n   💡 Try writing to tag to test actual protection status.\n"
+                            lockInfo += "   Factory tags often have protection enabled.\n"
                             completion(lockInfo)
                         } else {
                             lockInfo += " (No password protection)\n"
-                            lockInfo += "\n   ✅ Tag is writable!\n"
+                            lockInfo += "\n   ✅ AUTH0 disabled - Tag should be writable!\n"
                             completion(lockInfo)
                         }
                     } else {

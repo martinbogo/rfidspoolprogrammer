@@ -319,7 +319,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.10;
+				MARKETING_VERSION = 1.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.martinbogo.spoolprogrammer;
 				PRODUCT_NAME = SpoolProgrammer;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -354,7 +354,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.10;
+				MARKETING_VERSION = 1.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.martinbogo.spoolprogrammer;
 				PRODUCT_NAME = SpoolProgrammer;
 				PROVISIONING_PROFILE_SPECIFIER = "";

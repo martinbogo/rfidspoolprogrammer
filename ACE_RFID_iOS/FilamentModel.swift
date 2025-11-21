@@ -19,7 +19,7 @@ private func debugLog(_ message: String) {
 enum FilamentType: String, CaseIterable, Codable {
     case pla = "PLA"
     case plaMatte = "PLA Matte"
-    case plaPlus = "PLA+"
+    case plaPlus = "PLA Plus"  // Changed: Match Anycubic's actual tag format (with space)
     case plaSilk = "PLA Silk"
     case abs = "ABS"
     case petg = "PETG"
@@ -125,7 +125,7 @@ class FilamentDatabase: ObservableObject {
                           sku: "AHPLA-001", 
                           temperatures: .defaultTemperatures(for: .pla), 
                           isCustom: false),
-            FilamentProfile(name: "Anycubic PLA+", brand: "Anycubic", type: .plaPlus, 
+            FilamentProfile(name: "Anycubic PLA Plus", brand: "Anycubic", type: .plaPlus, 
                           sku: "AHPLLB-103", 
                           temperatures: .defaultTemperatures(for: .plaPlus), 
                           isCustom: false),
@@ -151,7 +151,7 @@ class FilamentDatabase: ObservableObject {
                           sku: "", 
                           temperatures: .defaultTemperatures(for: .plaMatte), 
                           isCustom: false),
-            FilamentProfile(name: "Generic PLA+", brand: "Generic", type: .plaPlus, 
+            FilamentProfile(name: "Generic PLA Plus", brand: "Generic", type: .plaPlus, 
                           sku: "", 
                           temperatures: .defaultTemperatures(for: .plaPlus), 
                           isCustom: false),
@@ -377,17 +377,18 @@ struct RFIDTagData {
         
         if profile == nil {
             // Create new profile and add to database
+            // Mark as custom so user can delete it if needed
             let newProfile = FilamentProfile(
                 name: profileName, 
                 brand: brand, 
                 type: filamentType, 
                 sku: sku, 
                 temperatures: temps, 
-                isCustom: false
+                isCustom: true  // Changed: Allow deletion of profiles read from tags
             )
-            database.profiles.append(newProfile)
-            profile = newProfile
-            debugLog("📌 Created new profile from tag: \(profileName)")
+            database.addProfile(newProfile)  // Changed: Use addProfile to persist to UserDefaults
+            profile = database.profiles.last  // Get the newly added profile
+            debugLog("📌 Created new custom profile from tag: \(profileName)")
         } else {
             // Update temperatures from tag
             profile?.temperatures = temps

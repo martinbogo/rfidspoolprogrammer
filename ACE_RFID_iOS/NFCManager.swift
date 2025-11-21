@@ -549,7 +549,15 @@ extension NFCManager: NFCTagReaderSessionDelegate {
             self.isScanning = false
             if let nfcError = error as? NFCReaderError {
                 if nfcError.code != .readerSessionInvalidationErrorUserCanceled {
-                    self.statusMessage = "Session error: \(error.localizedDescription)"
+                    // Provide more helpful error messages based on operation type
+                    if case .verifyWrite = self.currentOperation {
+                        self.statusMessage = "⚠️ Verification session error: \(error.localizedDescription)\n\n" +
+                                           "The write may have succeeded.\n" +
+                                           "Tip: Disable 'Auto-Verify' in Settings if this persists.\n" +
+                                           "Or use 'Read from Tag' to manually verify."
+                    } else {
+                        self.statusMessage = "Session error: \(error.localizedDescription)"
+                    }
                 }
             }
         }
@@ -654,8 +662,9 @@ extension NFCManager: NFCTagReaderSessionDelegate {
                     DispatchQueue.global().asyncAfter(deadline: .now() + 0.5) {
                         capturedSession.invalidate()
                         
-                        // Auto-start verify session after brief delay
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                        // Auto-start verify session after longer delay to ensure tag is ready
+                        // Increased from 1.0 to 1.5 seconds to prevent session errors
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                             self.currentOperation = .verifyWrite
                             self.startSession(with: "Hold near tag to verify write...")
                         }
@@ -663,7 +672,7 @@ extension NFCManager: NFCTagReaderSessionDelegate {
                 } else {
                     // Just close the session without verify
                     DispatchQueue.main.async {
-                        self.statusMessage = "✅ Write complete!"
+                        self.statusMessage = "✅ Write complete! (Auto-verify disabled in Settings)"
                     }
                     session.alertMessage = "✅ Write complete!"
                     session.invalidate()

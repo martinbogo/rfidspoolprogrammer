@@ -18,6 +18,7 @@ struct ColorPickerView: View {
     @State private var showHexAlert = false
     
     let presetColors: [(name: String, color: Color)] = [
+        ("Clear", Color(red: 0.95, green: 0.95, blue: 0.98, opacity: 0.95)), // Translucent/Natural filament
         ("Black", .black),
         ("White", .white),
         ("Gray", .gray),
@@ -134,43 +135,46 @@ struct ColorPickerView: View {
                                     .font(.subheadline)
                                     .foregroundColor(.secondary)
                                 
-                                ZStack(alignment: .leading) {
-                                    // Black to red gradient
-                                    LinearGradient(
-                                        gradient: Gradient(colors: [
-                                            Color(red: 0, green: green, blue: blue),
-                                            Color(red: 1, green: green, blue: blue),
-                                        ]),
-                                        startPoint: .leading,
-                                        endPoint: .trailing
-                                    )
-                                    .frame(height: 40)
-                                    .cornerRadius(20)
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 20)
-                                            .strokeBorder(Color.gray.opacity(0.3), lineWidth: 1)
-                                    )
-                                    
-                                    // Thumb
-                                    Circle()
-                                        .fill(Color(red: red, green: green, blue: blue))
-                                        .frame(width: 32, height: 32)
-                                        .overlay(
-                                            Circle()
-                                                .strokeBorder(Color.white, lineWidth: 3)
-                                                .shadow(color: .black.opacity(0.3), radius: 3, y: 1)
+                                GeometryReader { geometry in
+                                    ZStack(alignment: .leading) {
+                                        // Black to red gradient
+                                        LinearGradient(
+                                            gradient: Gradient(colors: [
+                                                Color(red: 0, green: green, blue: blue),
+                                                Color(red: 1, green: green, blue: blue),
+                                            ]),
+                                            startPoint: .leading,
+                                            endPoint: .trailing
                                         )
-                                        .offset(x: CGFloat(red) * (UIScreen.main.bounds.width - 96) - 16)
+                                        .frame(height: 40)
+                                        .cornerRadius(20)
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 20)
+                                                .strokeBorder(Color.gray.opacity(0.3), lineWidth: 1)
+                                        )
+                                        
+                                        // Thumb
+                                        Circle()
+                                            .fill(Color(red: red, green: green, blue: blue))
+                                            .frame(width: 32, height: 32)
+                                            .overlay(
+                                                Circle()
+                                                    .strokeBorder(Color.white, lineWidth: 3)
+                                                    .shadow(color: .black.opacity(0.3), radius: 3, y: 1)
+                                            )
+                                            .offset(x: CGFloat(red) * (geometry.size.width - 32))
+                                    }
+                                    .frame(height: 40)
+                                    .gesture(
+                                        DragGesture(minimumDistance: 0)
+                                            .onChanged { value in
+                                                let width = geometry.size.width - 32
+                                                red = min(max(0, Double(value.location.x - 16) / width), 1.0)
+                                                updateColor()
+                                            }
+                                    )
                                 }
                                 .frame(height: 40)
-                                .gesture(
-                                    DragGesture(minimumDistance: 0)
-                                        .onChanged { value in
-                                            let width = UIScreen.main.bounds.width - 96
-                                            red = min(max(0, Double(value.location.x) / width), 1.0)
-                                            updateColor()
-                                        }
-                                )
                             }
                             
                             // Green Slider
@@ -179,43 +183,46 @@ struct ColorPickerView: View {
                                     .font(.subheadline)
                                     .foregroundColor(.secondary)
                                 
-                                ZStack(alignment: .leading) {
-                                    // Black to green gradient
-                                    LinearGradient(
-                                        gradient: Gradient(colors: [
-                                            Color(red: red, green: 0, blue: blue),
-                                            Color(red: red, green: 1, blue: blue),
-                                        ]),
-                                        startPoint: .leading,
-                                        endPoint: .trailing
-                                    )
-                                    .frame(height: 40)
-                                    .cornerRadius(20)
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 20)
-                                            .strokeBorder(Color.gray.opacity(0.3), lineWidth: 1)
-                                    )
-                                    
-                                    // Thumb
-                                    Circle()
-                                        .fill(Color(red: red, green: green, blue: blue))
-                                        .frame(width: 32, height: 32)
-                                        .overlay(
-                                            Circle()
-                                                .strokeBorder(Color.white, lineWidth: 3)
-                                                .shadow(color: .black.opacity(0.3), radius: 3, y: 1)
+                                GeometryReader { geometry in
+                                    ZStack(alignment: .leading) {
+                                        // Black to green gradient
+                                        LinearGradient(
+                                            gradient: Gradient(colors: [
+                                                Color(red: red, green: 0, blue: blue),
+                                                Color(red: red, green: 1, blue: blue),
+                                            ]),
+                                            startPoint: .leading,
+                                            endPoint: .trailing
                                         )
-                                        .offset(x: CGFloat(green) * (UIScreen.main.bounds.width - 96) - 16)
+                                        .frame(height: 40)
+                                        .cornerRadius(20)
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 20)
+                                                .strokeBorder(Color.gray.opacity(0.3), lineWidth: 1)
+                                        )
+                                        
+                                        // Thumb
+                                        Circle()
+                                            .fill(Color(red: red, green: green, blue: blue))
+                                            .frame(width: 32, height: 32)
+                                            .overlay(
+                                                Circle()
+                                                    .strokeBorder(Color.white, lineWidth: 3)
+                                                    .shadow(color: .black.opacity(0.3), radius: 3, y: 1)
+                                            )
+                                            .offset(x: CGFloat(green) * (geometry.size.width - 32))
+                                    }
+                                    .frame(height: 40)
+                                    .gesture(
+                                        DragGesture(minimumDistance: 0)
+                                            .onChanged { value in
+                                                let width = geometry.size.width - 32
+                                                green = min(max(0, Double(value.location.x - 16) / width), 1.0)
+                                                updateColor()
+                                            }
+                                    )
                                 }
                                 .frame(height: 40)
-                                .gesture(
-                                    DragGesture(minimumDistance: 0)
-                                        .onChanged { value in
-                                            let width = UIScreen.main.bounds.width - 96
-                                            green = min(max(0, Double(value.location.x) / width), 1.0)
-                                            updateColor()
-                                        }
-                                )
                             }
                             
                             // Blue Slider
@@ -224,43 +231,46 @@ struct ColorPickerView: View {
                                     .font(.subheadline)
                                     .foregroundColor(.secondary)
                                 
-                                ZStack(alignment: .leading) {
-                                    // Black to blue gradient
-                                    LinearGradient(
-                                        gradient: Gradient(colors: [
-                                            Color(red: red, green: green, blue: 0),
-                                            Color(red: red, green: green, blue: 1),
-                                        ]),
-                                        startPoint: .leading,
-                                        endPoint: .trailing
-                                    )
-                                    .frame(height: 40)
-                                    .cornerRadius(20)
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 20)
-                                            .strokeBorder(Color.gray.opacity(0.3), lineWidth: 1)
-                                    )
-                                    
-                                    // Thumb
-                                    Circle()
-                                        .fill(Color(red: red, green: green, blue: blue))
-                                        .frame(width: 32, height: 32)
-                                        .overlay(
-                                            Circle()
-                                                .strokeBorder(Color.white, lineWidth: 3)
-                                                .shadow(color: .black.opacity(0.3), radius: 3, y: 1)
+                                GeometryReader { geometry in
+                                    ZStack(alignment: .leading) {
+                                        // Black to blue gradient
+                                        LinearGradient(
+                                            gradient: Gradient(colors: [
+                                                Color(red: red, green: green, blue: 0),
+                                                Color(red: red, green: green, blue: 1),
+                                            ]),
+                                            startPoint: .leading,
+                                            endPoint: .trailing
                                         )
-                                        .offset(x: CGFloat(blue) * (UIScreen.main.bounds.width - 96) - 16)
+                                        .frame(height: 40)
+                                        .cornerRadius(20)
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 20)
+                                                .strokeBorder(Color.gray.opacity(0.3), lineWidth: 1)
+                                        )
+                                        
+                                        // Thumb
+                                        Circle()
+                                            .fill(Color(red: red, green: green, blue: blue))
+                                            .frame(width: 32, height: 32)
+                                            .overlay(
+                                                Circle()
+                                                    .strokeBorder(Color.white, lineWidth: 3)
+                                                    .shadow(color: .black.opacity(0.3), radius: 3, y: 1)
+                                            )
+                                            .offset(x: CGFloat(blue) * (geometry.size.width - 32))
+                                    }
+                                    .frame(height: 40)
+                                    .gesture(
+                                        DragGesture(minimumDistance: 0)
+                                            .onChanged { value in
+                                                let width = geometry.size.width - 32
+                                                blue = min(max(0, Double(value.location.x - 16) / width), 1.0)
+                                                updateColor()
+                                            }
+                                    )
                                 }
                                 .frame(height: 40)
-                                .gesture(
-                                    DragGesture(minimumDistance: 0)
-                                        .onChanged { value in
-                                            let width = UIScreen.main.bounds.width - 96
-                                            blue = min(max(0, Double(value.location.x) / width), 1.0)
-                                            updateColor()
-                                        }
-                                )
                             }
                         }
                         .padding(.horizontal)

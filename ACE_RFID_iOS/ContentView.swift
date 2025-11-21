@@ -333,26 +333,24 @@ struct FilamentSelectionCard: View {
                         }
                     }
                     
-                    // Edit/Delete buttons for custom profiles
-                    if profile.isCustom {
-                        Divider()
-                        
-                        HStack(spacing: 12) {
-                            Button(action: { showingEditFilament = true }) {
-                                Label("Edit", systemImage: "pencil")
-                                    .frame(maxWidth: .infinity)
-                            }
-                            .buttonStyle(.bordered)
-                            
-                            Button(role: .destructive, action: {
-                                filamentDB.deleteProfile(profile)
-                                selectedProfile = nil
-                            }) {
-                                Label("Delete", systemImage: "trash")
-                                    .frame(maxWidth: .infinity)
-                            }
-                            .buttonStyle(.bordered)
+                    // Edit/Delete buttons for all profiles (users can manage their own list)
+                    Divider()
+                    
+                    HStack(spacing: 12) {
+                        Button(action: { showingEditFilament = true }) {
+                            Label("Edit", systemImage: "pencil")
+                                .frame(maxWidth: .infinity)
                         }
+                        .buttonStyle(.bordered)
+                        
+                        Button(role: .destructive, action: {
+                            filamentDB.deleteProfile(profile)
+                            selectedProfile = nil
+                        }) {
+                            Label("Delete", systemImage: "trash")
+                                .frame(maxWidth: .infinity)
+                        }
+                        .buttonStyle(.bordered)
                     }
                 }
             }

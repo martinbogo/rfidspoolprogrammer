@@ -114,99 +114,100 @@ class FilamentDatabase: ObservableObject {
     @Published var profiles: [FilamentProfile] = []
     
     init() {
-        loadDefaultProfiles()
-        loadCustomProfiles()
+        loadProfiles()
     }
     
-    private func loadDefaultProfiles() {
-        // Default profiles matching the Android app
-        let defaultProfiles = [
+    private func loadProfiles() {
+        // Try to load saved profiles from UserDefaults
+        if let data = UserDefaults.standard.data(forKey: "allFilamentProfiles"),
+           let savedProfiles = try? JSONDecoder().decode([FilamentProfile].self, from: data) {
+            profiles = savedProfiles
+        } else {
+            // First launch - load default profiles and mark them all as custom (editable)
+            profiles = createDefaultProfiles()
+            saveProfiles()
+        }
+    }
+    
+    private func createDefaultProfiles() -> [FilamentProfile] {
+        // Default profiles matching the Android app - all marked as custom (fully editable)
+        return [
             FilamentProfile(name: "Anycubic PLA", brand: "Anycubic", type: .pla, 
                           sku: "AHPLA-001", 
                           temperatures: .defaultTemperatures(for: .pla), 
-                          isCustom: false),
+                          isCustom: true),
             FilamentProfile(name: "Anycubic PLA Plus", brand: "Anycubic", type: .plaPlus, 
                           sku: "AHPLLB-103", 
                           temperatures: .defaultTemperatures(for: .plaPlus), 
-                          isCustom: false),
+                          isCustom: true),
             FilamentProfile(name: "Anycubic ABS", brand: "Anycubic", type: .abs, 
                           sku: "AHABS-001", 
                           temperatures: .defaultTemperatures(for: .abs), 
-                          isCustom: false),
+                          isCustom: true),
             FilamentProfile(name: "Anycubic PETG", brand: "Anycubic", type: .petg, 
                           sku: "AHPETG-001", 
                           temperatures: .defaultTemperatures(for: .petg), 
-                          isCustom: false),
+                          isCustom: true),
             FilamentProfile(name: "Anycubic TPU", brand: "Anycubic", type: .tpu, 
                           sku: "AHTPU-001", 
                           temperatures: .defaultTemperatures(for: .tpu), 
-                          isCustom: false),
+                          isCustom: true),
             
             // Generic profiles for all filament types
             FilamentProfile(name: "Generic PLA", brand: "Generic", type: .pla, 
                           sku: "", 
                           temperatures: .defaultTemperatures(for: .pla), 
-                          isCustom: false),
+                          isCustom: true),
             FilamentProfile(name: "Generic PLA Matte", brand: "Generic", type: .plaMatte, 
                           sku: "", 
                           temperatures: .defaultTemperatures(for: .plaMatte), 
-                          isCustom: false),
+                          isCustom: true),
             FilamentProfile(name: "Generic PLA Plus", brand: "Generic", type: .plaPlus, 
                           sku: "", 
                           temperatures: .defaultTemperatures(for: .plaPlus), 
-                          isCustom: false),
+                          isCustom: true),
             FilamentProfile(name: "Generic PLA Silk", brand: "Generic", type: .plaSilk, 
                           sku: "", 
                           temperatures: .defaultTemperatures(for: .plaSilk), 
-                          isCustom: false),
+                          isCustom: true),
             FilamentProfile(name: "Generic ABS", brand: "Generic", type: .abs, 
                           sku: "", 
                           temperatures: .defaultTemperatures(for: .abs), 
-                          isCustom: false),
+                          isCustom: true),
             FilamentProfile(name: "Generic PETG", brand: "Generic", type: .petg, 
                           sku: "", 
                           temperatures: .defaultTemperatures(for: .petg), 
-                          isCustom: false),
+                          isCustom: true),
             FilamentProfile(name: "Generic TPU", brand: "Generic", type: .tpu, 
                           sku: "", 
                           temperatures: .defaultTemperatures(for: .tpu), 
-                          isCustom: false),
+                          isCustom: true),
             FilamentProfile(name: "Generic Nylon", brand: "Generic", type: .nylon, 
                           sku: "", 
                           temperatures: .defaultTemperatures(for: .nylon), 
-                          isCustom: false),
+                          isCustom: true),
             FilamentProfile(name: "Generic ASA", brand: "Generic", type: .asa, 
                           sku: "", 
                           temperatures: .defaultTemperatures(for: .asa), 
-                          isCustom: false),
+                          isCustom: true),
             FilamentProfile(name: "Generic PC", brand: "Generic", type: .pc, 
                           sku: "", 
                           temperatures: .defaultTemperatures(for: .pc), 
-                          isCustom: false),
+                          isCustom: true),
             FilamentProfile(name: "Generic PVA", brand: "Generic", type: .pva, 
                           sku: "", 
                           temperatures: .defaultTemperatures(for: .pva), 
-                          isCustom: false),
+                          isCustom: true),
             FilamentProfile(name: "Generic HIPS", brand: "Generic", type: .hips, 
                           sku: "", 
                           temperatures: .defaultTemperatures(for: .hips), 
-                          isCustom: false),
+                          isCustom: true),
         ]
-        
-        profiles.append(contentsOf: defaultProfiles)
     }
     
-    private func loadCustomProfiles() {
-        if let data = UserDefaults.standard.data(forKey: "customFilamentProfiles"),
-           let customProfiles = try? JSONDecoder().decode([FilamentProfile].self, from: data) {
-            profiles.append(contentsOf: customProfiles)
-        }
-    }
-    
-    func saveCustomProfiles() {
-        let customProfiles = profiles.filter { $0.isCustom }
-        if let data = try? JSONEncoder().encode(customProfiles) {
-            UserDefaults.standard.set(data, forKey: "customFilamentProfiles")
+    func saveProfiles() {
+        if let data = try? JSONEncoder().encode(profiles) {
+            UserDefaults.standard.set(data, forKey: "allFilamentProfiles")
         }
     }
     
@@ -214,19 +215,19 @@ class FilamentDatabase: ObservableObject {
         var newProfile = profile
         newProfile.isCustom = true
         profiles.append(newProfile)
-        saveCustomProfiles()
+        saveProfiles()
     }
     
     func updateProfile(_ profile: FilamentProfile) {
         if let index = profiles.firstIndex(where: { $0.id == profile.id }) {
             profiles[index] = profile
-            saveCustomProfiles()
+            saveProfiles()
         }
     }
     
     func deleteProfile(_ profile: FilamentProfile) {
         profiles.removeAll { $0.id == profile.id }
-        saveCustomProfiles()
+        saveProfiles()
     }
 }
 

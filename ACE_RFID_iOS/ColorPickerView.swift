@@ -131,17 +131,23 @@ struct ColorPickerView: View {
                         VStack(spacing: 20) {
                             // Red Slider
                             VStack(alignment: .leading, spacing: 8) {
-                                Text("Red")
-                                    .font(.subheadline)
-                                    .foregroundColor(.secondary)
+                                HStack {
+                                    Text("Red")
+                                        .font(.subheadline)
+                                        .foregroundColor(.secondary)
+                                    Spacer()
+                                    Text("\(Int(red * 100))%")
+                                        .font(.subheadline)
+                                        .foregroundColor(.secondary)
+                                }
                                 
                                 GeometryReader { geometry in
                                     ZStack(alignment: .leading) {
-                                        // Black to red gradient
+                                        // Pure black to pure red gradient
                                         LinearGradient(
                                             gradient: Gradient(colors: [
-                                                Color(red: 0, green: green, blue: blue),
-                                                Color(red: 1, green: green, blue: blue),
+                                                Color(red: 0, green: 0, blue: 0),
+                                                Color(red: 1, green: 0, blue: 0),
                                             ]),
                                             startPoint: .leading,
                                             endPoint: .trailing
@@ -155,7 +161,7 @@ struct ColorPickerView: View {
                                         
                                         // Thumb
                                         Circle()
-                                            .fill(Color(red: red, green: green, blue: blue))
+                                            .fill(Color(red: red, green: 0, blue: 0))
                                             .frame(width: 32, height: 32)
                                             .overlay(
                                                 Circle()
@@ -179,17 +185,23 @@ struct ColorPickerView: View {
                             
                             // Green Slider
                             VStack(alignment: .leading, spacing: 8) {
-                                Text("Green")
-                                    .font(.subheadline)
-                                    .foregroundColor(.secondary)
+                                HStack {
+                                    Text("Green")
+                                        .font(.subheadline)
+                                        .foregroundColor(.secondary)
+                                    Spacer()
+                                    Text("\(Int(green * 100))%")
+                                        .font(.subheadline)
+                                        .foregroundColor(.secondary)
+                                }
                                 
                                 GeometryReader { geometry in
                                     ZStack(alignment: .leading) {
-                                        // Black to green gradient
+                                        // Pure black to pure green gradient
                                         LinearGradient(
                                             gradient: Gradient(colors: [
-                                                Color(red: red, green: 0, blue: blue),
-                                                Color(red: red, green: 1, blue: blue),
+                                                Color(red: 0, green: 0, blue: 0),
+                                                Color(red: 0, green: 1, blue: 0),
                                             ]),
                                             startPoint: .leading,
                                             endPoint: .trailing
@@ -203,7 +215,7 @@ struct ColorPickerView: View {
                                         
                                         // Thumb
                                         Circle()
-                                            .fill(Color(red: red, green: green, blue: blue))
+                                            .fill(Color(red: 0, green: green, blue: 0))
                                             .frame(width: 32, height: 32)
                                             .overlay(
                                                 Circle()
@@ -227,17 +239,23 @@ struct ColorPickerView: View {
                             
                             // Blue Slider
                             VStack(alignment: .leading, spacing: 8) {
-                                Text("Blue")
-                                    .font(.subheadline)
-                                    .foregroundColor(.secondary)
+                                HStack {
+                                    Text("Blue")
+                                        .font(.subheadline)
+                                        .foregroundColor(.secondary)
+                                    Spacer()
+                                    Text("\(Int(blue * 100))%")
+                                        .font(.subheadline)
+                                        .foregroundColor(.secondary)
+                                }
                                 
                                 GeometryReader { geometry in
                                     ZStack(alignment: .leading) {
-                                        // Black to blue gradient
+                                        // Pure black to pure blue gradient
                                         LinearGradient(
                                             gradient: Gradient(colors: [
-                                                Color(red: red, green: green, blue: 0),
-                                                Color(red: red, green: green, blue: 1),
+                                                Color(red: 0, green: 0, blue: 0),
+                                                Color(red: 0, green: 0, blue: 1),
                                             ]),
                                             startPoint: .leading,
                                             endPoint: .trailing
@@ -251,7 +269,7 @@ struct ColorPickerView: View {
                                         
                                         // Thumb
                                         Circle()
-                                            .fill(Color(red: red, green: green, blue: blue))
+                                            .fill(Color(red: 0, green: 0, blue: blue))
                                             .frame(width: 32, height: 32)
                                             .overlay(
                                                 Circle()

@@ -17,7 +17,7 @@ struct AboutView: View {
     }
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             ScrollView {
                 VStack(spacing: 24) {
                     // App Icon and Name

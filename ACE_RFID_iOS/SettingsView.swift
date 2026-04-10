@@ -12,7 +12,7 @@ struct SettingsView: View {
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             List {
                                 // General Settings
                 Section(header: Text("General"), 

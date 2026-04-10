@@ -38,7 +38,7 @@ struct ColorPickerView: View {
     ]
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             ScrollView {
                 VStack(spacing: 24) {
                     // Color Preview & Hex Input
@@ -314,7 +314,7 @@ struct ColorPickerView: View {
             }
             .alert("Enter Hex Color", isPresented: $showHexAlert) {
                 TextField("#RRGGBB", text: $hexInput)
-                    .autocapitalization(.allCharacters)
+                    .textInputAutocapitalization(.characters)
                 Button("Cancel", role: .cancel) { }
                 Button("Apply") {
                     if let color = colorFromHex(hexInput) {

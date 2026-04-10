@@ -27,7 +27,7 @@ struct ContentView: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             ScrollView {
                 VStack(spacing: 20) {
                     // Hero Section - Tag Status Card
@@ -122,7 +122,7 @@ struct ContentView: View {
                     TagDetailsView(details: details)
                 }
             }
-            .onChange(of: nfcManager.lastReadBytes) { newBytes in
+            .onChange(of: nfcManager.lastReadBytes) { oldValue, newBytes in
                 if let bytes = newBytes, let tagData = RFIDTagData.fromBytes(bytes, database: filamentDB) {
                     withAnimation(.spring(response: 0.3)) {
                         selectedProfile = tagData.profile
@@ -147,7 +147,6 @@ struct ContentView: View {
                 }
             }
         }
-        .navigationViewStyle(StackNavigationViewStyle())
     }
     
     // MARK: - Reset to Defaults
@@ -672,7 +671,7 @@ struct LockStatusView: View {
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 12) {
                     if lockStatus.isEmpty {
@@ -730,7 +729,7 @@ struct AddFilamentView: View {
     @State private var bedMax = 60
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             Form {
                 Section("Filament Information") {
                     Toggle("Custom Brand", isOn: $useCustomBrand)
@@ -823,7 +822,7 @@ struct EditFilamentView: View {
     @State private var bedMax = 60
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             Form {
                 Section("Filament Information") {
                     TextField("Brand Name", text: $brand)

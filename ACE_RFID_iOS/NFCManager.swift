@@ -21,6 +21,7 @@ private func debugLog(_ message: String) {
     #endif
 }
 
+@MainActor
 class NFCManager: NSObject, ObservableObject {
     @Published var isScanning = false
     @Published var tagUID: String = ""
@@ -96,7 +97,7 @@ class NFCManager: NSObject, ObservableObject {
         writeData = data
         
         // Important: Set polling option and alert message
-        nfcSession = NFCTagReaderSession(pollingOption: .iso14443, delegate: self, queue: nil)
+        nfcSession = NFCTagReaderSession(pollingOption: [.iso14443, .iso15693], delegate: self, queue: nil)
         nfcSession?.alertMessage = "Hold iPhone near RFID tag to write.\n⚠️ Keep steady - do not move!"
         nfcSession?.begin()
         isScanning = true
@@ -123,7 +124,7 @@ class NFCManager: NSObject, ObservableObject {
     }
     
     private func startSession(with message: String) {
-        nfcSession = NFCTagReaderSession(pollingOption: .iso14443, delegate: self)
+        nfcSession = NFCTagReaderSession(pollingOption: [.iso14443, .iso15693], delegate: self)
         nfcSession?.alertMessage = message
         nfcSession?.begin()
         isScanning = true
@@ -548,15 +549,27 @@ extension NFCManager: NFCTagReaderSessionDelegate {
         DispatchQueue.main.async {
             self.isScanning = false
             if let nfcError = error as? NFCReaderError {
-                if nfcError.code != .readerSessionInvalidationErrorUserCanceled {
-                    // Provide more helpful error messages based on operation type
+                switch nfcError.code {
+                case .readerSessionInvalidationErrorUserCanceled:
+                    break // User canceled, no message needed
+                case .readerSessionInvalidationErrorSessionTimeout:
+                    self.statusMessage = "NFC scan timed out.\n\n" +
+                                       "Tips:\n" +
+                                       "• Hold the top-back of your iPhone directly on the tag\n" +
+                                       "• Remove any phone case if thick\n" +
+                                       "• Ensure the tag is NTAG213/215/216 compatible\n" +
+                                       "• Try holding steady for 3-5 seconds"
+                case .readerSessionInvalidationErrorFirstNDEFTagRead:
+                    break
+                default:
                     if case .verifyWrite = self.currentOperation {
-                        self.statusMessage = "⚠️ Verification session error: \(error.localizedDescription)\n\n" +
+                        self.statusMessage = "Verification session error: \(error.localizedDescription)\n\n" +
                                            "The write may have succeeded.\n" +
                                            "Tip: Disable 'Auto-Verify' in Settings if this persists.\n" +
                                            "Or use 'Read from Tag' to manually verify."
                     } else {
-                        self.statusMessage = "Session error: \(error.localizedDescription)"
+                        self.statusMessage = "NFC error: \(error.localizedDescription)\n\n" +
+                                           "Try moving your iPhone closer to the tag and hold steady."
                     }
                 }
             }
@@ -565,52 +578,65 @@ extension NFCManager: NFCTagReaderSessionDelegate {
     
     func tagReaderSession(_ session: NFCTagReaderSession, didDetect tags: [NFCTag]) {
         guard let firstTag = tags.first else {
-            session.invalidate(errorMessage: "No tags found")
+            session.restartPolling()
             return
         }
         
         session.connect(to: firstTag) { error in
             if let error = error {
-                session.invalidate(errorMessage: "Connection error: \(error.localizedDescription)")
+                debugLog("Connection error: \(error.localizedDescription), restarting polling")
+                session.restartPolling()
                 return
             }
             
             // Handle MiFare tags (NTAG213/215/216)
-            guard case let .miFare(tag) = firstTag else {
-                session.invalidate(errorMessage: "Unsupported tag type")
-                return
-            }
-            
-            // Get UID
-            let uid = tag.identifier
-            let uidString = uid.map { String(format: "%02X", $0) }.joined(separator: ":")
-            
-            DispatchQueue.main.async {
-                self.tagUID = uidString
-                self.tagType = self.detectTagType(tag)
-                // Play detection haptic when tag is detected
-                self.playDetectionHaptic()
-            }
-            
-            // Perform operation based on current mode
-            switch self.currentOperation {
-            case .read:
-                self.performRead(tag: tag, session: session)
+            switch firstTag {
+            case .miFare(let tag):
+                let uid = tag.identifier
+                let uidString = uid.map { String(format: "%02X", $0) }.joined(separator: ":")
                 
-            case .write(let data):
-                self.performWrite(tag: tag, data: data, session: session)
+                DispatchQueue.main.async {
+                    self.tagUID = uidString
+                    self.tagType = self.detectTagType(tag)
+                    self.playDetectionHaptic()
+                }
                 
-            case .format:
-                self.performFormat(tag: tag, session: session)
+                // Perform operation based on current mode
+                switch self.currentOperation {
+                case .read:
+                    self.performRead(tag: tag, session: session)
+                case .write(let data):
+                    self.performWrite(tag: tag, data: data, session: session)
+                case .format:
+                    self.performFormat(tag: tag, session: session)
+                case .checkLock:
+                    self.performLockCheck(tag: tag, session: session)
+                case .verifyWrite:
+                    self.performVerifyWrite(tag: tag, session: session)
+                case .none:
+                    session.invalidate()
+                }
                 
-            case .checkLock:
-                self.performLockCheck(tag: tag, session: session)
+            case .iso15693(let tag):
+                let uid = tag.identifier
+                let uidString = uid.map { String(format: "%02X", $0) }.joined(separator: ":")
+                DispatchQueue.main.async {
+                    self.tagUID = uidString
+                    self.tagType = "ISO 15693"
+                    self.statusMessage = "Detected ISO 15693 tag (UID: \(uidString))\n\n" +
+                                       "This tag type is not supported for read/write operations.\n" +
+                                       "This app requires NTAG213/215/216 (ISO 14443A) tags."
+                    self.playErrorHaptic()
+                }
+                session.invalidate(errorMessage: "Unsupported tag type: ISO 15693.\nUse NTAG213/215/216 tags.")
                 
-            case .verifyWrite:
-                self.performVerifyWrite(tag: tag, session: session)
-                
-            case .none:
-                session.invalidate()
+            default:
+                DispatchQueue.main.async {
+                    self.statusMessage = "Unsupported tag type detected.\n\n" +
+                                       "This app requires NTAG213/215/216 (ISO 14443A) tags."
+                    self.playErrorHaptic()
+                }
+                session.invalidate(errorMessage: "Unsupported tag type.\nUse NTAG213/215/216 tags.")
             }
         }
     }

@@ -1,10 +1,12 @@
-# App Store Submission Guide - Version 1.1.0
+# App Store Submission Guide - Version 1.2.0
 
 ## Current Version Info
-- **Marketing Version:** 1.1.0
-- **Build Number:** 2
+- **Marketing Version:** 1.2.0
+- **Build Number:** 3
 - **Bundle ID:** com.martinbogo.spoolprogrammer
 - **App Name:** Spool Programmer (Display: ACE Spool RFID Programmer)
+- **Deployment Target:** iOS 18.0
+- **Swift Version:** 5.0
 
 ## ✅ Pre-Submission Checklist
 
@@ -19,10 +21,13 @@
 - ✅ Build 2 (incremented from previous)
 
 ### 3. Features in This Release
-- ✅ Settings Screen with user preferences
-- ✅ Tag Details Display with memory visualization
-- ✅ Settings integration (haptics, auto-verify toggles)
-- ✅ Improved user experience
+- ✅ Fixed NFC scanning failures on iOS 26
+- ✅ Broadened tag polling (ISO 14443 + ISO 15693)
+- ✅ Added NDEF entitlement for full NFC access
+- ✅ Improved session recovery (restartPolling on failure)
+- ✅ Better error messages and timeout guidance
+- ✅ Replaced deprecated NavigationView with NavigationStack
+- ✅ Deployment target raised to iOS 18.0
 
 ## 🚀 Step-by-Step Submission Process
 
@@ -52,7 +57,7 @@ git push origin main
 
 In the Organizer window (after archive completes):
 
-1. **Select your archive** (should show version 1.1.0, build 2)
+1. **Select your archive** (should show version 1.2.0, build 3)
 
 2. **Click "Validate App"**
    - Choose your Apple ID/Team
@@ -122,39 +127,37 @@ In the Organizer window (after archive completes):
 
 1. **In App Store Connect → App Store tab:**
    - Click the "+" button next to "iOS App"
-   - Enter version: **1.1.0**
+   - Enter version: **1.2.0**
 
 2. **Fill Required Fields:**
 
    **What's New in This Version:**
    ```
-   🎛️ New Settings Screen
-   • Customize default spool size
-   • Choose temperature units (°C or °F)
-   • Toggle auto-verify after writing
-   • Control haptic feedback
-   • Debug information option
+   Version 1.2.0 - iOS 26 Compatibility Update
 
-   📊 Tag Details Display
-   • View tag memory usage with color-coded progress bar
-   • See tag UID and type information
-   • Track when tags were last read
-   • Beautiful visual presentation
+   Bug Fixes:
+   • Fixed NFC tag scanning failures on iOS 26
+   • Improved tag detection reliability with broader protocol support
+   • Better session recovery when connection is interrupted
 
-   ✨ Improvements
-   • Settings are now saved between sessions
-   • Better control over NFC operations
-   • Enhanced user experience
+   Improvements:
+   • Added ISO 15693 protocol support for wider tag compatibility
+   • Clearer error messages when tags cannot be read
+   • Helpful positioning tips when scans time out
+   • Updated UI framework for modern iOS
+
+   Requirements:
+   • Now requires iOS 18.0 or later
    ```
 
    **Promotional Text (Optional):**
    ```
-   Now with customizable settings and detailed tag information! Version 1.1.0 brings powerful new features for managing your 3D printer filament spools.
+   Updated for iOS 26! Version 1.2.0 fixes NFC scanning issues and improves tag detection reliability for programming 3D printer filament spool RFID tags.
    ```
 
 3. **Select Your Build:**
    - Under "Build" section, click the "+" button
-   - Select build 2
+   - Select build 3
    - Click "Done"
 
 4. **Review Other Sections:**
@@ -167,8 +170,25 @@ In the Organizer window (after archive completes):
 
 1. **Add/Update Required Items:**
    - App Preview (video - optional but recommended)
-   - Screenshots (required - at least 3 for 6.5" display)
+   - Screenshots (required - at least 3 for 6.7" display)
    - App Icon (should already be in assets)
+
+   **Screenshots (6.7" iPhone - 1290x2796):**
+
+   One screenshot is pre-generated in `screenshots/01_main_screen.png`.
+   To capture additional screenshots in the Simulator:
+
+   a. Run the app on iPhone 15 Pro Max simulator
+   b. Navigate to the screen you want (Settings, About, Color Picker, etc.)
+   c. Press Cmd+S in the Simulator to save a screenshot
+   d. Screenshots land in ~/Desktop by default
+
+   Recommended set (3-5 screenshots):
+   - Main screen (provided: `screenshots/01_main_screen.png`)
+   - Filament profile selected with color picker
+   - Settings screen
+   - About screen
+   - Tag details view (if available from a previous read)
 
 2. **App Review Information:**
    - Contact Name
@@ -182,13 +202,15 @@ In the Organizer window (after archive completes):
    NTAG213/215/216 NFC tags to test fully. The app reads and 
    writes filament spool information to NFC tags for 3D printing.
 
+   Version 1.2.0 fixes NFC scanning failures reported on iOS 26.
+   Changes include broader NFC protocol polling and improved 
+   session recovery. No new permissions or features beyond NFC.
+
    Key features to test:
-   • Settings screen - customization options
-   • Tag Details - read any NFC tag to see details
-   • All features work without tags (UI testing)
-   
-   Version 1.1.0 adds Settings and Tag Details features.
-   No breaking changes from previous version.
+   • Main screen UI layout and navigation
+   • Settings screen - customization options  
+   • About screen - app information
+   • NFC operations require physical tags (expected to fail on simulator)
    ```
 
 4. **Click "Add for Review"**
@@ -209,8 +231,8 @@ In the Organizer window (after archive completes):
 **Before submitting to App Store, test with TestFlight:**
 
 1. **In App Store Connect → TestFlight tab:**
-   - Build 2 should appear after processing
-   - Click on build 2
+   - Build 3 should appear after processing
+   - Click on build 3
 
 2. **Add Internal Testers:**
    - Click "Internal Testing"
@@ -224,15 +246,15 @@ In the Organizer window (after archive completes):
 
 4. **Test Thoroughly:**
    - Install via TestFlight on physical device
-   - Test all new features
-   - Verify Settings persistence
-   - Test Tag Details display
-   - Check haptic feedback toggle
+   - Verify NFC scanning works on iOS 26
+   - Test tag read/write with NTAG213/215/216
+   - Check Settings persistence
+   - Verify haptic feedback toggle
    - Verify auto-verify toggle
 
 5. **Fix Any Issues:**
    - If bugs found, fix them
-   - Increment build number to 3
+   - Increment build number to 4
    - Archive and upload again
    - TestFlight testers get automatic update
 

@@ -21,7 +21,6 @@ private func debugLog(_ message: String) {
     #endif
 }
 
-@MainActor
 class NFCManager: NSObject, ObservableObject {
     @Published var isScanning = false
     @Published var tagUID: String = ""
